@@ -1,0 +1,3 @@
+server/ent/*
+!server/ent/schema/
+!server/ent/generate.go

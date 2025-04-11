@@ -1,0 +1,7 @@
+Este repositório serve para testes frontend
+
+Para criar um novo schema
+go run -mod=mod entgo.io/ent/cmd/ent --target internals/server/ent/schema new User
+
+Para gerar os modelos
+go generate ./internals/server/ent

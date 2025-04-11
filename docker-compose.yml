@@ -1,0 +1,23 @@
+services:
+  local_bd_veyron:
+    image: postgres:13
+    container_name: bd_entrevistas
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dev
+    ports:
+      - '5435:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - local_test
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  local_test:
+    name: local_test
+    external: true
