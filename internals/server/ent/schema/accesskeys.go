@@ -24,5 +24,6 @@ func (AccessKeys) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("products", Product.Type),
 		edge.To("categories", Category.Type),
+		edge.To("logs", Logs.Type),
 	}
 }

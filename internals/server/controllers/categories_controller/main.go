@@ -16,10 +16,16 @@ type Controllers interface {
 	Delete(c fiber.Ctx) error
 	List(c fiber.Ctx) error
 	Patch(c fiber.Ctx) error
+
+	GetDbInstance() *ent.Client
 }
 
 func New(db *ent.Client) Controllers {
 	return &controllers{
 		Db: db,
 	}
+}
+
+func (c *controllers) GetDbInstance() *ent.Client {
+	return c.Db
 }

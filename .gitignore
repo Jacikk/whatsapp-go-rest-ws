@@ -1,5 +1,5 @@
-server/ent/*
-!server/ent/schema/
-!server/ent/generate.go
+internals/server/ent/*
+!internals/server/ent/schema
+!internals/server/ent/generate.go
 
 postgres_data

@@ -6,7 +6,6 @@ import (
 	"bd_test/internals/server/controllers/challenge_controller"
 	"bd_test/internals/server/controllers/products_controller"
 	"bd_test/internals/server/ent"
-	"bd_test/internals/server/middlewares"
 	"bd_test/internals/server/routes"
 	"bd_test/internals/server/seeder"
 	"context"
@@ -40,9 +39,6 @@ func New(port int) {
 	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
-
-	mdlwares := middlewares.New(client)
-	app.Use(mdlwares.AccessKeyMiddleware())
 
 	challengeCtrler := challenge_controller.New()
 	routes.RegisterChallengeRouter(app, challengeCtrler)

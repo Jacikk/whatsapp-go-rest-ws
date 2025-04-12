@@ -24,6 +24,13 @@ func (b *basicAuth) AccessKeyMiddleware() fiber.Handler {
 
 		c.Locals("access_key_id", ak.ID)
 
+		// Save the path and access_key_id in Logs
+		b.Db.Logs.Create().
+			SetNillableRoute(&c.Route().Path).
+			SetNillableMethod(&c.Route().Method).
+			SetAccessKeyID(ak.ID).
+			Save(c.Context())
+
 		return c.Next()
 	}
 }

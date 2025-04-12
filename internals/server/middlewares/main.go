@@ -14,8 +14,15 @@ type BasicAuth interface {
 	AccessKeyMiddleware() fiber.Handler
 }
 
+var instance *basicAuth
+
 func New(db *ent.Client) BasicAuth {
-	return &basicAuth{
+	if instance != nil {
+		return instance
+	}
+	
+	instance = &basicAuth{
 		Db: db,
 	}
+	return instance
 }
