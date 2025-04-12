@@ -12,6 +12,9 @@ RUN go mod download
 # Copy the rest of the application code
 COPY . .
 
+# Build entgo schemas
+RUN go generate ./internals/server/ent
+
 # Build the Go application
 RUN go build -o entry cmd/main.go
 
