@@ -2,6 +2,7 @@ package products_controller
 
 import (
 	"bd_test/internals/server/ent"
+	"strings"
 
 	"github.com/gofiber/fiber/v3"
 )
@@ -15,15 +16,13 @@ type CreateProductRequest struct {
 }
 
 func (c controllers) Create(ctx fiber.Ctx) error {
-	req := CreateProductRequest{
-		Name:        fiber.Query(ctx, "name", ""),
-		Description: fiber.Query(ctx, "description", ""),
-		ImageUrl:    fiber.Query(ctx, "image_url", ""),
-		Price:       fiber.Query(ctx, "price", 0.0),
-		CategoryId:  fiber.Query(ctx, "category_id", 0),
+	req := new(CreateProductRequest)
+	if err := ctx.Bind().Body(req); err != nil {
+		return err
 	}
 
 	accessKeyID := ctx.Locals("access_key_id").(int)
+
 	if accessKeyID == 0 {
 		ctx.Status(400).SendString("Access Key ID is required")
 		return nil
@@ -31,6 +30,26 @@ func (c controllers) Create(ctx fiber.Ctx) error {
 
 	if req.Name == "" {
 		ctx.Status(400).SendString("Name is required")
+		return nil
+	}
+
+	if req.Description == "" {
+		ctx.Status(400).SendString("Description is required")
+		return nil
+	}
+
+	if req.ImageUrl == "" {
+		ctx.Status(400).SendString("Image URL is required")
+		return nil
+	}
+
+	if req.Price <= 0 {
+		ctx.Status(400).SendString("Price must be greater than 0")
+		return nil
+	}
+
+	if req.CategoryId <= 0 {
+		ctx.Status(400).SendString("Category ID must be greater than 0")
 		return nil
 	}
 
@@ -53,7 +72,16 @@ func (c controllers) Create(ctx fiber.Ctx) error {
 
 	if err != nil {
 		if ent.IsConstraintError(err) {
-			ctx.Status(400).SendString("Product with this name already exists")
+			if strings.Contains(err.Error(), `violates foreign key constraint "products_categories_products"`) {
+				ctx.Status(400).SendString("Category ID does not exist")
+				return nil
+			}
+
+			if strings.Contains(err.Error(), `duplicate key value violates unique constraint "products_name_key"`) {
+				ctx.Status(400).SendString("Product name already exists")
+				return nil
+			}
+			ctx.Status(400).SendString(err.Error())
 			return nil
 		}
 

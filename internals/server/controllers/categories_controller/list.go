@@ -27,17 +27,18 @@ func (c controllers) List(ctx fiber.Ctx) error {
 	}
 
 	catQ := c.Db.Category.Query()
-	catQ = catQ.Offset(filters.Offset).Limit(filters.Limit)
-
+	
 	if filters.Name != "" {
 		catQ = catQ.Where(category.NameContainsFold(ctx.Query("name")))
 	}
-
+	
 	count, err := catQ.Count(ctx.Context())
 	if err != nil {
 		return ctx.Status(500).JSON(err.Error())
 	}
-
+	
+	catQ = catQ.Offset(filters.Offset).Limit(filters.Limit)
+	
 	categories, err := catQ.All(ctx.Context())
 	if err != nil {
 		return ctx.Status(500).JSON(err.Error())

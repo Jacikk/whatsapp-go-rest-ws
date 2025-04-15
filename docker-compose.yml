@@ -19,28 +19,28 @@ services:
       timeout: 5s
       retries: 5
 
-  backend_to_interviews_front:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend_to_interviews_front
-    ports:
-      - '5000:5000'
-    depends_on:
-      bd_to_interviews_front:
-        condition: service_healthy
-    environment:
-      PORT: '5000'
-      PG_HOST: '172.16.1.2'
-      PG_USER: 'root'
-      PG_PASSWORD: 'password'
-      PG_DBNAME: 'dev'
-      PG_PORT: '5432'
-      PG_SSLMODE: 'disable'
-      DEV_MODE: 'true'
-    networks:
-      local_test:
-        ipv4_address: 172.16.1.3
+  # backend_to_interviews_front:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: backend_to_interviews_front
+  #   ports:
+  #     - '5000:5000'
+  #   depends_on:
+  #     bd_to_interviews_front:
+  #       condition: service_healthy
+  #   environment:
+  #     PORT: '5000'
+  #     PG_HOST: '172.16.1.2'
+  #     PG_USER: 'root'
+  #     PG_PASSWORD: 'password'
+  #     PG_DBNAME: 'dev'
+  #     PG_PORT: '5432'
+  #     PG_SSLMODE: 'disable'
+  #     DEV_MODE: 'true'
+  #   networks:
+  #     local_test:
+  #       ipv4_address: 172.16.1.3
 
 volumes:
   postgres_data:

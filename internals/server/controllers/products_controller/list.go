@@ -13,7 +13,7 @@ type Filters struct {
 }
 
 func (c controllers) List(ctx fiber.Ctx) error {
-	
+
 	filters := Filters{
 		Offset: fiber.Query(ctx, "offset", 0),
 		Limit:  fiber.Query(ctx, "limit", 10),
@@ -26,8 +26,8 @@ func (c controllers) List(ctx fiber.Ctx) error {
 	if filters.Limit <= 0 || filters.Limit > 20 {
 		return ctx.Status(400).JSON("Limit must be greater than 0 and less than or equal to 20")
 	}
+
 	prodQ := c.Db.Product.Query()
-	prodQ = prodQ.Offset(filters.Offset).Limit(filters.Limit)
 
 	if filters.Name != "" {
 		prodQ = prodQ.Where(product.NameContainsFold(filters.Name))
@@ -37,6 +37,8 @@ func (c controllers) List(ctx fiber.Ctx) error {
 	if err != nil {
 		return ctx.Status(500).JSON(err.Error())
 	}
+
+	prodQ = prodQ.Offset(filters.Offset).Limit(filters.Limit)
 
 	products, err := prodQ.All(ctx.Context())
 	if err != nil {
