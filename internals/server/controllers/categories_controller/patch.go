@@ -53,5 +53,9 @@ func (c controllers) Patch(ctx fiber.Ctx) error {
 		return ctx.Status(500).JSON(err.Error())
 	}
 
+	if err := tx.Commit(); err != nil {
+		return ctx.Status(500).JSON(err.Error())
+	}
+
 	return ctx.Status(200).JSON(updated)
 }
