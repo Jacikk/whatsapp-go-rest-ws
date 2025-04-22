@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bd_test/internals/env"
-	"bd_test/internals/server"
+	"whatsapp_rest_ws/internal/env"
+	"whatsapp_rest_ws/internal/server"
 )
 
 func main() {
