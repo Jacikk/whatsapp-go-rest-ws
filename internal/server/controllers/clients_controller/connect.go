@@ -73,7 +73,7 @@ func (c *controller) Connect(ctx fiber.Ctx) error {
 		go func() {
 			for evt := range qrCode {
 				if evt.Event == "code" && req.GetQrCode != nil && *req.GetQrCode {
-					resp := whatsapp_proto.ConnectResponse{
+					resp := ConnectResponse{
 						QrCode:  &evt.Code,
 						Status:  "Awaiting for user to scan QR code",
 						IsEnded: false,
@@ -86,7 +86,7 @@ func (c *controller) Connect(ctx fiber.Ctx) error {
 				}
 
 				if evt.Event == "success" {
-					resp := whatsapp_proto.ConnectResponse{
+					resp := ConnectResponse{
 						IsEnded: true,
 						Status:  "Client connected successfully",
 					}
@@ -112,7 +112,7 @@ func (c *controller) Connect(ctx fiber.Ctx) error {
 			errChan <- err
 		}
 
-		resp := whatsapp_proto.ConnectResponse{
+		resp := ConnectResponse{
 			IsEnded: true,
 			Status:  "Client connected",
 		}
@@ -125,7 +125,7 @@ func (c *controller) Connect(ctx fiber.Ctx) error {
 	}
 
 	if client.IsLoggedIn() {
-		resp := whatsapp_proto.ConnectResponse{
+		resp := ConnectResponse{
 			IsEnded: true,
 			Status:  "Client connected",
 		}
